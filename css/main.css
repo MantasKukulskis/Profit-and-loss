@@ -1,0 +1,60 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+
+header > div > nav {
+    padding-top: 20px;
+    text-align: right;
+    word-spacing: 60px;
+    padding-right: 35px;
+}
+
+header > div > nav > a {
+    text-transform: uppercase;
+    text-decoration: none;
+    color: rgb(28, 95, 126);
+    font-weight: bold;
+    
+}
+
+
+
+main > div > h1 {
+    padding-top: 180px;
+    padding-left: 40px;
+    color: rgb(28, 95, 126);
+    font-weight: bold;
+}
+
+main > div > p {
+    color: rgb(12, 168, 209);
+    padding-left: 40px;
+    margin-top: 15px;
+    
+}
+
+main > div > nav > a {
+    padding: 14px 24px;
+    text-decoration: none;
+    margin: 2px;
+    display: inline-block;
+    border-radius: 25px;
+    margin-top: 30px;
+    margin-left: 60px;
+}
+
+main > div > nav > a:nth-child(1) {
+    color: white;
+    background-color: rgb(12, 168, 209);
+    
+}
+
+main > div > nav > a:nth-child(2) {
+    color: white;
+    background-color: rgb(28, 95, 126); 
+}
+
+
