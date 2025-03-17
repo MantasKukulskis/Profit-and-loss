@@ -4,22 +4,41 @@
     margin: 0;
 }
 
-
-header > div > nav {
-    padding-top: 20px;
+header > div {
+    width: 100%;
     text-align: right;
-    word-spacing: 60px;
-    padding-right: 35px;
 }
-
 header > div > nav > a {
     text-transform: uppercase;
     text-decoration: none;
     color: rgb(28, 95, 126);
     font-weight: bold;
+    padding-top: 20px;
+    text-align: right;
+    word-spacing: 60px;
+    padding-right: 35px;
+    transition: all 0.3s ease;
+    color: #333;
     
 }
 
+header > div > nav > a:hover {
+    transform: translateY(5px);
+    color: #333;
+    background: grey;
+    color: aliceblue;
+}
+
+
+main {
+    padding: 0 24px 0 48px;
+    align-items: center;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px;
+    gap: 35px;
+}
 
 
 main > div > h1 {
@@ -27,6 +46,23 @@ main > div > h1 {
     padding-left: 40px;
     color: rgb(28, 95, 126);
     font-weight: bold;
+    
+}
+
+.navi {
+    padding: 8px 16px;
+    display: flex;
+    gap: 30px;
+    transition: all 0.3s ease;
+    color: #333;
+}
+
+.navi > a:hover {
+    
+    transform: translateY(5px);
+    color: #333;
+    background: grey;
+    color: aliceblue;
 }
 
 main > div > p {
@@ -46,15 +82,19 @@ main > div > nav > a {
     margin-left: 60px;
 }
 
-main > div > nav > a:nth-child(1) {
+.links2 > a:nth-child(1) {
     color: white;
     background-color: rgb(12, 168, 209);
     
 }
 
-main > div > nav > a:nth-child(2) {
+.links2 > a:nth-child(2) {
     color: white;
     background-color: rgb(28, 95, 126); 
+}
+
+.links2 > a:hover {
+    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
 }
 
 
