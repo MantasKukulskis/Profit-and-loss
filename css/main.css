@@ -50,9 +50,7 @@ main {
     max-width: 1200px;
     gap: 35px;
 }
-main > img {
-    width: 100%;
-}
+
 
 
 main > div > h1 {
@@ -96,6 +94,11 @@ main > div > nav > a {
     margin-top: 30px;
     margin-left: 60px;
 }
+.links2 {
+    display: flex;
+    gap: 2px;
+    padding: 10px 20px;
+}
 
 .links2 > a:nth-child(1) {
     color: white;
@@ -106,6 +109,7 @@ main > div > nav > a {
 .links2 > a:nth-child(2) {
     color: white;
     background-color: rgb(28, 95, 126); 
+    
 }
 
 .links2 > a:hover {
