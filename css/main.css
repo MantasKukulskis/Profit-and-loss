@@ -23,17 +23,17 @@ header > div > nav > a {
     font-weight: bold;
     padding-top: 20px;
     text-align: right;
-    word-spacing: 60px;
-    padding-right: 35px;
+    word-spacing: 50px;
+    padding-right: 30px;
     display: inline-block;
     background-color: #007bff;
     color: white;
-    padding: 10px 25px;
+    padding: 10px 15px;
     font-size: 18px;
     text-decoration: none;
-    border-radius: 5px;
+    border-radius: 10px;
     transition: transform 0.3s ease-in-out;
-    
+    margin-right: 10px;
 }
 
 header > div > nav > a:hover {
