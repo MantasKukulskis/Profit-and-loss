@@ -41,3 +41,10 @@ a {
 header > div > nav > a:hover {
     transform: scale(1.2);
 }
+
+main {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
