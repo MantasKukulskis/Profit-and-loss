@@ -11,6 +11,16 @@ header {
     
 }
 
+body {
+    background-image: url('../img/login.webp'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
 a {
     text-transform: uppercase;
     color: rgb(255, 255, 255);
