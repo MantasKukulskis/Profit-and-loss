@@ -3,6 +3,15 @@
     padding: 0;
     margin: 0;
 }
+body {
+    background-image: url('../img/background.png'); 
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
 
 header > div {
     width: 100%;
@@ -10,23 +19,25 @@ header > div {
 }
 header > div > nav > a {
     text-transform: uppercase;
-    text-decoration: none;
-    color: rgb(28, 95, 126);
+    color: rgb(255, 255, 255);
     font-weight: bold;
     padding-top: 20px;
     text-align: right;
     word-spacing: 60px;
     padding-right: 35px;
-    transition: all 0.3s ease;
-    color: #333;
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 25px;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: transform 0.3s ease-in-out;
     
 }
 
 header > div > nav > a:hover {
-    transform: translateY(5px);
-    color: #333;
-    background: grey;
-    color: aliceblue;
+    transform: scale(1.2);
 }
 
 
@@ -38,6 +49,9 @@ main {
     justify-content: space-between;
     max-width: 1200px;
     gap: 35px;
+}
+main > img {
+    width: 100%;
 }
 
 
@@ -69,6 +83,7 @@ main > div > p {
     color: rgb(12, 168, 209);
     padding-left: 40px;
     margin-top: 15px;
+    width: 50%;
     
 }
 
@@ -94,7 +109,7 @@ main > div > nav > a {
 }
 
 .links2 > a:hover {
-    box-shadow: 5px 5px 5px 0px rgba(0, 0, 0, 0.5);
+    box-shadow: 5px 5px 5px 0px rgba(255, 255, 255, 0.5);
 }
 
 
