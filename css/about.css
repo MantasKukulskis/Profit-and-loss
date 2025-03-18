@@ -1,0 +1,33 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+header { 
+    width: 100%;
+    text-align: right;  
+}
+
+a {
+    text-transform: uppercase;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    padding-top: 20px;
+    text-align: right;
+    word-spacing: 50px;
+    padding-right: 30px;
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+    margin-right: 10px;
+}
+
+header > div > nav > a:hover {
+    transform: scale(1.2);
+}
