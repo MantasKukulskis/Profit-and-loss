@@ -13,11 +13,11 @@ body {
     height: 100vh;
 }
 
-header > div {
+.main-nav {
     width: 100%;
     text-align: right;
 }
-header > div > nav > a {
+.nav-link {
     text-transform: uppercase;
     color: rgb(255, 255, 255);
     font-weight: bold;
@@ -36,7 +36,7 @@ header > div > nav > a {
     margin-right: 10px;
 }
 
-header > div > nav > a:hover {
+.nav-link:hover {
     transform: scale(1.2);
 }
 
@@ -53,7 +53,7 @@ main {
 
 
 
-main > div > h1 {
+.h-element {
     padding-top: 180px;
     padding-left: 40px;
     color: rgb(28, 95, 126);
@@ -61,23 +61,9 @@ main > div > h1 {
     
 }
 
-.navi {
-    padding: 8px 16px;
-    display: flex;
-    gap: 30px;
-    transition: all 0.3s ease;
-    color: #333;
-}
 
-.navi > a:hover {
-    
-    transform: translateY(5px);
-    color: #333;
-    background: grey;
-    color: aliceblue;
-}
 
-main > div > p {
+.p-element {
     color: rgb(12, 168, 209);
     padding-left: 40px;
     margin-top: 15px;
@@ -85,7 +71,30 @@ main > div > p {
     
 }
 
-main > div > nav > a {
+.links {
+    display: flex;
+    gap: 2px;
+    padding: 10px 20px;
+}
+
+.links > a:nth-child(1) {
+    color: white;
+    background-color: rgb(12, 168, 209);
+    
+}
+
+.links > a:nth-child(2) {
+    color: white;
+    background-color: rgb(28, 95, 126); 
+    
+}
+
+.links > a:hover {
+    box-shadow: 5px 5px 5px 0px rgba(255, 255, 255, 0.5);
+}
+
+
+.btn {
     padding: 14px 24px;
     text-decoration: none;
     margin: 2px;
@@ -93,27 +102,6 @@ main > div > nav > a {
     border-radius: 25px;
     margin-top: 30px;
     margin-left: 60px;
-}
-.links2 {
-    display: flex;
-    gap: 2px;
-    padding: 10px 20px;
-}
-
-.links2 > a:nth-child(1) {
-    color: white;
-    background-color: rgb(12, 168, 209);
-    
-}
-
-.links2 > a:nth-child(2) {
-    color: white;
-    background-color: rgb(28, 95, 126); 
-    
-}
-
-.links2 > a:hover {
-    box-shadow: 5px 5px 5px 0px rgba(255, 255, 255, 0.5);
 }
 
 
