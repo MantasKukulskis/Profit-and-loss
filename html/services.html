@@ -9,9 +9,8 @@
     <link rel="shortcut icon" href="../favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png" />
     <meta name="apple-mobile-web-app-title" content="MyWebSite" />
-    <link rel="manifest" href="./favicon/site.webmanifest" />
+    <link rel="manifest" href="favicon/site.webmanifest" />
     <link rel="stylesheet" href="../css/services.css">
-    
 </head>
 <body>
     <header>
@@ -22,41 +21,51 @@
         </div>
     </header>
 
-    
     <main>
         <div>
-
-            <h2>💰Profit</h2>
+            <h2>💰 Profit</h2>
 
             <form class="income-form">
-                <label for="income date">📅Select date:</label>
+                <label for="income-date">📅 Select date:</label>
                 <input type="date" id="income-date" name="date" required>
-            
-                <label for="income-amount">💵Earned money (€):</label>
+
+                <label for="income-amount">💵 Earned money (€):</label>
                 <input type="number" id="income-amount" name="amount" step="0.01" min="1" max="1000" required>
                 <span id="income-error-message" style="color: red; display: none;">⚠️ The amount cannot exceed 1000 €!</span>
-            
+
                 <button type="submit">Confirm</button>
             </form>
         </div>
 
         <div>
+            <h2>💰 Loss</h2>
 
-            <h2>💰Loos</h2>
+            <form class="outcome-form">
+                <label for="outcome-date">📅 Select date:</label>
+                <input type="date" id="outcome-date" name="date" required>
 
-                <form class="outcome-form">
-                    <label for="outcome-date">📅Select date:</label>
-                    <input type="date" id="outcome-date" name="date" required>
-                
-                    <label for="amount">💵Spend money (€):</label>
-                    <input type="number" id="outcome-amount" name="amount" step="0.01" min="1" max="1000" required>
-                    <span id="outcome-error-message" style="color: red; display: none;">⚠️ The amount cannot exceed 1000 €!</span>
-                    
-                
-                    <button type="submit">Confirm</button>
-                </form>
+                <label for="outcome-amount">💵 Spend money (€):</label>
+                <input type="number" id="outcome-amount" name="amount" step="0.01" min="1" max="1000" required>
+                <span id="outcome-error-message" style="color: red; display: none;">⚠️ The amount cannot exceed 1000 €!</span>
+
+                <button type="submit">Confirm</button>
+            </form>
         </div>
     </main>
+
+    <div class="results">
+        <h2>Total Profit: <span id="total-income">€0</span></h2>
+        <h2>Total Loss: <span id="total-outcome">€0</span></h2>
+        <h2>Net Balance: <span id="net-balance">€0</span></h2>
+
+        <h3>Submitted Profit Entries:</h3>
+        <ul id="income-list"></ul> <!-- Income entries will appear here -->
+
+        <h3>Submitted Loss Entries:</h3>
+        <ul id="outcome-list"></ul> <!-- Outcome entries will appear here -->
+    </div>
+
+    <!-- Link to the JavaScript file -->
     <script src="../js/script.js" defer></script>
 </body>
-</html>
+</html
