@@ -1,100 +1,86 @@
-console.log("✅ JavaScript is connected to services.html!");
-
-// Wait until the DOM is fully loaded
 document.addEventListener("DOMContentLoaded", function () {
-    const incomeForm = document.querySelector(".income-form");
-    const outcomeForm = document.querySelector(".outcome-form");
-
+    console.log("✅ script.js is loaded.");
+  
+    // Modal Elements
+    const modal = document.getElementById("modal");
+    const openModalBtn = document.getElementById("open-modal");
+    const closeModalBtn = document.querySelector(".close");
+    const addEntryBtn = document.getElementById("add-entry");
+  
+    // Form Elements inside modal
+    const entryTypeEl = document.getElementById("entry-type");
+    const entryDateEl = document.getElementById("entry-date");
+    const entryAmountEl = document.getElementById("entry-amount");
+    
+    // Table and Totals Elements
+    const entryList = document.getElementById("entry-list");
     const totalIncomeEl = document.getElementById("total-income");
     const totalOutcomeEl = document.getElementById("total-outcome");
     const netBalanceEl = document.getElementById("net-balance");
-
-    const incomeList = document.getElementById("income-list");
-    const outcomeList = document.getElementById("outcome-list");
-
+  
     let totalIncome = 0;
     let totalOutcome = 0;
-
-    // Function to update the total amounts on the page
+  
+    // Function to update totals
     function updateDisplay() {
-        totalIncomeEl.textContent = `€${totalIncome.toFixed(2)}`;
-        totalOutcomeEl.textContent = `€${totalOutcome.toFixed(2)}`;
-        netBalanceEl.textContent = `€${(totalIncome - totalOutcome).toFixed(2)}`;
+      totalIncomeEl.textContent = `€${totalIncome.toFixed(2)}`;
+      totalOutcomeEl.textContent = `€${totalOutcome.toFixed(2)}`;
+      netBalanceEl.textContent = `€${(totalIncome - totalOutcome).toFixed(2)}`;
     }
-
-    // Validate the input amount
-    function validateAmount(inputField, errorMessage) {
-        let amount = parseFloat(inputField.value);
-
-        if (isNaN(amount) || amount <= 0) {
-            errorMessage.textContent = "Enter a valid positive number!";
-            errorMessage.style.display = "inline";
-            inputField.value = "";
-            return false;
-        } else if (amount > 1000) {
-            errorMessage.textContent = "Maximum allowed amount is €1000!";
-            errorMessage.style.display = "inline";
-            inputField.value = 1000;
-            return false;
-        } else {
-            errorMessage.style.display = "none";
-            return true;
-        }
-    }
-
-    // Handle the income form submission
-    if (incomeForm) {
-        incomeForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            const amountInput = document.getElementById("income-amount");
-            const dateInput = document.getElementById("income-date");
-            const errorMessage = document.getElementById("income-error-message");
-
-            if (validateAmount(amountInput, errorMessage)) {
-                const amount = parseFloat(amountInput.value);
-                const date = dateInput.value;
-
-                // Update total income
-                totalIncome += amount;
-                updateDisplay();
-
-                // Add to the income list
-                const listItem = document.createElement("li");
-                listItem.textContent = `Date: ${date}, Profit: €${amount.toFixed(2)}`;
-                incomeList.appendChild(listItem);
-
-                // Reset form inputs
-                amountInput.value = "";
-                dateInput.value = "";
-            }
-        });
-    }
-
-    // Handle the outcome form submission
-    if (outcomeForm) {
-        outcomeForm.addEventListener("submit", function (event) {
-            event.preventDefault();
-            const amountInput = document.getElementById("outcome-amount");
-            const dateInput = document.getElementById("outcome-date");
-            const errorMessage = document.getElementById("outcome-error-message");
-
-            if (validateAmount(amountInput, errorMessage)) {
-                const amount = parseFloat(amountInput.value);
-                const date = dateInput.value;
-
-                // Update total outcome
-                totalOutcome += amount;
-                updateDisplay();
-
-                // Add to the outcome list
-                const listItem = document.createElement("li");
-                listItem.textContent = `Date: ${date}, Loss: €${amount.toFixed(2)}`;
-                outcomeList.appendChild(listItem);
-
-                // Reset form inputs
-                amountInput.value = "";
-                dateInput.value = "";
-            }
-        });
-    }
-});
+  
+    // Open modal
+    openModalBtn.addEventListener("click", function () {
+      modal.style.display = "block";
+    });
+  
+    // Close modal when clicking the close button
+    closeModalBtn.addEventListener("click", function () {
+      modal.style.display = "none";
+    });
+  
+    // Close modal when clicking outside modal content
+    window.addEventListener("click", function (event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    });
+  
+    // Add new entry on button click
+    addEntryBtn.addEventListener("click", function () {
+      const type = entryTypeEl.value;
+      const date = entryDateEl.value;
+      const amount = parseFloat(entryAmountEl.value);
+  
+      // Validate inputs
+      if (!date) {
+        alert("Please select a date.");
+        return;
+      }
+      if (isNaN(amount) || amount <= 0 || amount > 1000) {
+        alert("Please enter a valid amount between 1 and 1000€.");
+        return;
+      }
+  
+      // Create a new table row
+      const newRow = document.createElement("tr");
+      newRow.innerHTML = `
+        <td>${date}</td>
+        <td>${type === "profit" ? "✅ Profit" : "❌ Loss"}</td>
+        <td>€${amount.toFixed(2)}</td>
+      `;
+      entryList.appendChild(newRow);
+  
+      // Update totals
+      if (type === "profit") {
+        totalIncome += amount;
+      } else {
+        totalOutcome += amount;
+      }
+      updateDisplay();
+  
+      // Clear inputs and close modal
+      entryDateEl.value = "";
+      entryAmountEl.value = "";
+      modal.style.display = "none";
+    });
+  });
