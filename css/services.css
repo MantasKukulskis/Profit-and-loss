@@ -15,11 +15,25 @@ body {
     color: white;
   }
   
-  header nav a {
-    text-decoration: none;
-    color: #ffffff;
+header nav a {
+    text-transform: uppercase;
+    color: rgb(255, 255, 255);
+    font-weight: bold;
+    padding-top: 20px;
+    text-align: right;
+    word-spacing: 50px;
+    padding-right: 30px;
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
     font-size: 18px;
-  }
+    text-decoration: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+    margin-right: 10px;
+}
+
   
 
   table {
@@ -38,12 +52,10 @@ body {
     text-align: left;
   }
   
-  /* Totals Section */
   .totals {
     margin-top: 20px;
   }
   
-  /* Button */
   button {
     padding: 10px 20px;
     font-size: 16px;
@@ -51,9 +63,8 @@ body {
     margin-top: 10px;
   }
   
-  /* Modal Styles */
   .modal {
-    display: none; /* Hidden by default */
+    display: none; 
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -61,20 +72,19 @@ body {
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(138, 73, 73);
   }
   
   .modal-content {
-    background-color: #fff;
+    background-color: #b36464;
     margin: 10% auto;
     padding: 20px;
     width: 50%;
     border-radius: 5px;
-    box-shadow: 0 5px 15px rgb(255, 255, 255);
+    box-shadow: 0 5px 15px rgb(59, 21, 21);
     position: relative;
   }
-  
-  /* Close Button */
+
   .close {
     position: absolute;
     top: 10px;
@@ -86,5 +96,81 @@ body {
   
   .close:hover,
   .close:focus {
-    color: #ffffff;
+    color: #805050;
+  }
+
+  .modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); 
+    backdrop-filter: blur(2px); 
+  }
+  
+  
+  .modal-content {
+    background: url("../images/modal-bg.jpg") no-repeat center center/cover, #fff;  
+    
+    padding: 20px;
+    width: 50%;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+  }
+  
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    color: #bc6c6c;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .close:hover {
+    color: #080808;
+  }
+  
+  .modal-content h2 {
+    margin-top: 0;
+    color: #886d6d;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+  }
+  
+  .modal-content label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #d57474;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+  }
+  
+  .modal-content input,
+  .modal-content select {
+    width: 100%;
+    padding: 8px;
+    border: none;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  
+  .modal-content button {
+    padding: 10px 20px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    color: #c19393;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal-content button:hover {
+    background-color: #218838;
   }
