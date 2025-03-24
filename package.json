@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"nodemon server.js\" \"dead-server --host=localhost --port=8082\"",
+    "dev": "concurrently \"nodemon server.js\" \"dead-server --host=localhost --port=8086\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -11,11 +11,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "concurrently": "^9.1.2",
     "cors": "^2.8.5",
     "dead-server": "^1.0.9",
     "express": "^4.21.2",
+    "nodemailer": "^6.10.0",
     "nodemon": "^3.1.9",
     "sqlite3": "^5.1.7"
   }

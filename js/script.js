@@ -1,3 +1,8 @@
+import './login.js';
+import './register.js';
+import './forgotPassword.js';
+import './resetPassword.js';
+
 document.addEventListener("DOMContentLoaded", function () {
   console.log("✅ script.js loaded.");
 
