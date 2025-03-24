@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-image: url('../img/services.png');
+    background-image: url('../img/008.jpg');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -12,7 +12,7 @@ body {
   
   h1, h2, h3 {
     margin: 10px 0;
-    color: white;
+    color: rgb(242, 237, 237);
   }
 
 header {
@@ -138,7 +138,7 @@ header > nav > a:hover {
   
   
   .modal-content {
-    background: url("../apple-touch-icon.png") no-repeat center center/cover, #fff;  
+    background: url("../login.webp") no-repeat center center/cover, #fff;  
     
     padding: 20px;
     width: 50%;
