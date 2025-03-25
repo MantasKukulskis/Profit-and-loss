@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "concurrently \"nodemon server.js\" \"dead-server --host=localhost --port=8086\"",
+    "dev": "concurrently \"nodemon server.js\" \"dead-server --host=localhost --port=8088\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

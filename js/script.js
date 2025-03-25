@@ -1,7 +1,7 @@
-import './login.js';
-import './register.js';
-import './forgotPassword.js';
-import './resetPassword.js';
+// import './login.js';
+// import './register.js';
+// import './forgotPassword.js';
+// import './resetPassword.js';
 
 document.addEventListener("DOMContentLoaded", function () {
   console.log("✅ script.js loaded.");
@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let allEntries = [];
 
   function fetchEntries() {
-    fetch("http://localhost:5000/get-entries")
+    fetch("http://localhost:5006/get-entries")
       .then(response => response.json())
       .then(data => {
         allEntries = data;
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateDisplay(allEntries);
     applyFilter(); 
 
-    fetch(`http://localhost:5000/delete-entry/${entryToRemove.id}`, {
+    fetch(`http://localhost:5006/delete-entry/${entryToRemove.id}`, {
       method: "DELETE"
     })
       .then(response => response.json())
@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const newEntry = { type, date, amount };
 
     
-    fetch("http://localhost:5000/add-entry", {
+    fetch("http://localhost:5006/add-entry", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
