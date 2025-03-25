@@ -1,48 +1,47 @@
 const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
-const cors = require("cors");
-const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 
 const app = express();
 const db = new sqlite3.Database("./database.db");
 
-app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json()); // Nereikia body-parser, nes express jau apdoroja JSON
 app.use(express.static("public"));
+
+// Pagalbinė klaidos apdorojimo funkcija
+function handleError(res, error) {
+    console.error(error.message); // Atspausdiname klaidą serverio konsolėje
+    res.status(500).json({ error: error.message });
+}
 
 // Registracijos maršrutas
 app.post("/register", (req, res) => {
-    const { username, email, password } = req.body;
+  const { username, email, password } = req.body;
 
-    // Patikriname, ar visi laukeliai užpildyti
-    if (!username || !email || !password) {
-        return res.status(400).json({ message: "Please fill all fields" });
-    }
+  if (!username || !email || !password) {
+      return res.status(400).json({ message: "Please fill all fields" });
+  }
 
-    // Patikriname, ar vartotojo vardas jau egzistuoja
-    db.get("SELECT * FROM users WHERE username = ?", [username], (err, row) => {
-        if (err) return res.status(500).json({ error: err.message });
+  db.get("SELECT * FROM users WHERE username = ?", [username], (err, row) => {
+      if (err) return res.status(500).json({ error: err.message });
 
-        if (row) {
-            return res.status(400).json({ message: "Username already exists" });
-        }
+      if (row) {
+          return res.status(400).json({ message: "Username already exists" });
+      }
 
-        // Slaptažodžio šifravimas
-        bcrypt.hash(password, 10, (err, hashedPassword) => {
-            if (err) return res.status(500).json({ error: err.message });
+      bcrypt.hash(password, 10, (err, hashedPassword) => {
+          if (err) return res.status(500).json({ error: err.message });
 
-            // Įrašome vartotoją į duomenų bazę
-            db.run("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword], function (err) {
-                if (err) {
-                    return res.status(500).json({ error: err.message });
-                }
+          db.run("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", [username, email, hashedPassword], function (err) {
+              if (err) {
+                  return res.status(500).json({ error: err.message });
+              }
 
-                res.status(201).json({ message: "User registered successfully" });
-            });
-        });
-    });
+              res.status(201).json({ message: "User registered successfully" });
+          });
+      });
+  });
 });
 
 // Prisijungimo API maršrutas
@@ -50,15 +49,14 @@ app.post("/login", (req, res) => {
     const { username, password } = req.body;
 
     db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
-        if (err) return res.status(500).json({ error: err.message });
+        if (err) return handleError(res, err);
 
         if (!user) {
             return res.status(401).json({ success: false, message: "Invalid username or password" });
         }
 
-        // Palyginame šifruotą slaptažodį
         bcrypt.compare(password, user.password, (err, result) => {
-            if (err) return res.status(500).json({ error: err.message });
+            if (err) return handleError(res, err);
 
             if (result) {
                 res.json({ success: true, message: "Login successful" });
@@ -88,7 +86,7 @@ app.get("/get-entries", (req, res) => {
     }
 
     db.all(query, params, (err, rows) => {
-        if (err) return res.status(500).json({ error: err.message });
+        if (err) return handleError(res, err);
         res.json(rows);
     });
 });
@@ -104,7 +102,7 @@ app.post("/add-entry", (req, res) => {
         function (err) {
             if (err) {
                 console.error("Error inserting data:", err.message); 
-                return res.status(500).json({ error: err.message });
+                return handleError(res, err);
             }
 
             console.log("Entry added with ID:", this.lastID); 
@@ -116,7 +114,7 @@ app.post("/add-entry", (req, res) => {
 // Maršrutas įrašui ištrinti
 app.delete("/delete-entry/:id", (req, res) => {
     db.run("DELETE FROM entries WHERE id = ?", req.params.id, function (err) {
-        if (err) return res.status(500).json({ error: err.message });
+        if (err) return handleError(res, err);
         res.json({ message: "Entry deleted" });
     });
 });
@@ -131,8 +129,8 @@ app.listen(PORT, () => {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'your-email@gmail.com', // Atitinkamai pakeiskite savo el. pašto adresą
-        pass: 'your-email-password'    // Atitinkamai pakeiskite savo el. pašto slaptažodį arba naudokite Google App Password
+        user: process.env.EMAIL, // Naudokite aplinkos kintamuosius
+        pass: process.env.EMAIL_PASSWORD // Naudokite aplinkos kintamuosius
     }
 });
 
@@ -140,20 +138,17 @@ const transporter = nodemailer.createTransport({
 app.post('/forgot-password', (req, res) => {
     const { email } = req.body;
 
-    // Patikrinkite, ar el. paštas egzistuoja
     db.get('SELECT * FROM users WHERE email = ?', [email], (err, user) => {
-        if (err) return res.status(500).json({ success: false, message: 'Database error' });
+        if (err) return handleError(res, err);
 
         if (!user) {
             return res.status(404).json({ success: false, message: 'No account with that email found' });
         }
 
-        // Generuojame slaptažodžio atstatymo nuorodą
-        const resetToken = Math.random().toString(36).substring(2, 15);  // Atsitiktinis tokenas
+        const resetToken = Math.random().toString(36).substring(2, 15);
 
-        // Siųskite atstatymo nuorodą el. paštu
         const mailOptions = {
-            from: 'your-email@gmail.com',  // Atitinkamai pakeiskite savo el. pašto adresą
+            from: process.env.EMAIL,
             to: email,
             subject: 'Password Reset Request',
             text: `Click on the following link to reset your password: http://localhost:5006/reset-password?token=${resetToken}`

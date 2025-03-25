@@ -23,7 +23,7 @@
 
     <div class="login-container">
         <h1>Register</h1>
-        <form id="register-form">
+        <form id="register-form" action="/register" method="POST">
             <input type="text" id="username" name="username" placeholder="Username" required />
             <input type="email" id="email" name="email" placeholder="Email" required />
             <input type="password" id="password" name="password" placeholder="Password" required />
@@ -37,41 +37,47 @@
     </div>
 
     <script>
-        document.getElementById("register-form").addEventListener("submit", function(e) {
-            e.preventDefault();  // Užkerta kelią formos pateikimui
-
+        document.getElementById("register-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+    
             const username = document.getElementById("username").value;
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             const confirmPassword = document.getElementById("confirm-password").value;
-
-            // Patikrinimas, ar slaptažodžiai sutampa
+    
+            // Patikriname, ar slaptažodžiai sutampa
             if (password !== confirmPassword) {
-                alert("Passwords do not match.");
+                alert("Passwords do not match!");
                 return;
             }
-
-            // Siuntimas į serverį per fetch metodą
+    
+            // Siųsti duomenis į serverį
+            const data = {
+                username: username,
+                email: email,
+                password: password
+            };
+    
             fetch("/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ username, email, password })
+                body: JSON.stringify(data)
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    alert("Registration successful!");
-                    window.location.href = "login.html";  // Nukreipimas į login puslapį
-                } else {
-                    alert("Error: " + data.message);  // Klaidos pranešimas
+                if (data.message) {
+                    alert(data.message); // Parodys registracijos sėkmės pranešimą
+                    window.location.href = "services.html"; // Nukreips į kitą puslapį
                 }
             })
             .catch(error => {
-                console.error("Error:", error);
+                console.error('Error:', error);
+                alert('Registration failed!');
             });
         });
     </script>
+    <script src="../js/register.js" defer></script>
 </body>
 </html>
