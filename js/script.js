@@ -31,7 +31,10 @@ document.addEventListener("DOMContentLoaded", function () {
   let allEntries = [];
 
   function fetchEntries() {
-    fetch("http://localhost:5006/get-entries")
+    fetch("http://localhost:5007/get-entries", {
+      method: 'GET',
+      mode: 'no-cors'
+    })
       .then(response => response.json())
       .then(data => {
         allEntries = data;
@@ -95,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
     updateDisplay(allEntries);
     applyFilter(); 
 
-    fetch(`http://localhost:5006/delete-entry/${entryToRemove.id}`, {
+    fetch(`http://localhost:5007/delete-entry/${entryToRemove.id}`, {
       method: "DELETE"
     })
       .then(response => response.json())
@@ -122,6 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   
   addEntryBtn.addEventListener("click", function () {
+    console.log("Add button clicked");
     const type = entryTypeEl.value;
     const date = entryDateEl.value;
     const amount = parseFloat(entryAmountEl.value);
@@ -139,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const newEntry = { type, date, amount };
 
     
-    fetch("http://localhost:5006/add-entry", {
+    fetch("http://localhost:5007/add-entry", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

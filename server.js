@@ -120,7 +120,7 @@ app.delete("/delete-entry/:id", (req, res) => {
 });
 
 // Serverio klausymas
-const PORT = 5006;
+const PORT = 5008;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
@@ -132,6 +132,36 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL, // Naudokite aplinkos kintamuosius
         pass: process.env.EMAIL_PASSWORD // Naudokite aplinkos kintamuosius
     }
+});
+
+// const cors = require('cors'); // Importuojame cors paketą
+
+
+// // Įgaliname CORS visoms užklausoms
+// app.use(cors({
+//     origin: 'http://localhost:8088',
+//     methods: ['GET', 'POST', 'DELETE'],
+//     allowedHeaders: ['Content-Type', 'Authorization'],
+//     credentials: true
+// }));
+
+// app.use((req, res, next) => {
+//     res.header('Access-Control-Allow-Origin', 'http://localhost:8088');
+//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+//     res.header('Access-Control-Allow-Credentials', 'true');
+//     next();
+//   });
+
+// Jūsų kitų serverio konfigūracijų
+app.get('/get-entries', (req, res) => {
+    console.log('test');
+  // Ši užklausa dabar turėtų veikti be CORS klaidų
+  res.json([{ date: '2025-03-01', type: 'profit', amount: 100 }]); // Pavyzdinis atsakymas
+});
+
+app.listen(5007, () => {
+  console.log('Server is running on http://localhost:5007');
 });
 
 // // Slaptažodžio atstatymo užklausa
