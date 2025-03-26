@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
   function fetchEntries() {
     fetch("http://localhost:5007/get-entries", {
       method: 'GET',
-      mode: 'no-cors'
     })
       .then(response => response.json())
       .then(data => {

@@ -2,18 +2,26 @@ const express = require("express");
 const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const cors = require('cors');
 
 const app = express();
 const db = new sqlite3.Database("./database.db");
 
-app.use(express.json()); // Nereikia body-parser, nes express jau apdoroja JSON
+app.use(cors({
+    origin: 'http://localhost:8088',
+    methods: ['GET', 'POST', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+}));
+
+app.use(express.json()); 
 app.use(express.static("public"));
 
-// Pagalbinė klaidos apdorojimo funkcija
 function handleError(res, error) {
-    console.error(error.message); // Atspausdiname klaidą serverio konsolėje
+    console.error(error.message);
     res.status(500).json({ error: error.message });
 }
+
 
 // Registracijos maršrutas
 app.post("/register", (req, res) => {
@@ -70,7 +78,6 @@ app.post("/login", (req, res) => {
 // Maršrutas įrašų gavimui pagal mėnesį ir metus
 app.get("/get-entries", (req, res) => {
     const { month, year } = req.query;
-
     let query = "SELECT * FROM entries";
     let params = [];
 
@@ -86,13 +93,19 @@ app.get("/get-entries", (req, res) => {
     }
 
     db.all(query, params, (err, rows) => {
-        if (err) return handleError(res, err);
-        res.json(rows);
+        if (err) {
+            console.error("Database error:", err);
+            return res.status(500).json({ error: "Internal server error" });
+        }
+
+        console.log("Fetched entries:", rows);
+        res.json(rows || []);
     });
 });
 
 // Maršrutas naujo įrašo pridėjimui
 app.post("/add-entry", (req, res) => {
+    console.log('Add entry route hit');
     const { type, date, amount } = req.body;
 
     console.log("Received entry:", { type, date, amount });
@@ -102,7 +115,7 @@ app.post("/add-entry", (req, res) => {
         function (err) {
             if (err) {
                 console.error("Error inserting data:", err.message); 
-                return handleError(res, err);
+                return res.status(500).json({ error: err.message });
             }
 
             console.log("Entry added with ID:", this.lastID); 
@@ -120,10 +133,10 @@ app.delete("/delete-entry/:id", (req, res) => {
 });
 
 // Serverio klausymas
-const PORT = 5008;
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-});
+// const PORT = 5008;
+// app.listen(PORT, () => {
+//     console.log(`Server is running on http://localhost:${PORT}`);
+// });
 
 // Pavyzdinis el. pašto nustatymas naudojant nodemailer
 const transporter = nodemailer.createTransport({
@@ -132,32 +145,6 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL, // Naudokite aplinkos kintamuosius
         pass: process.env.EMAIL_PASSWORD // Naudokite aplinkos kintamuosius
     }
-});
-
-// const cors = require('cors'); // Importuojame cors paketą
-
-
-// // Įgaliname CORS visoms užklausoms
-// app.use(cors({
-//     origin: 'http://localhost:8088',
-//     methods: ['GET', 'POST', 'DELETE'],
-//     allowedHeaders: ['Content-Type', 'Authorization'],
-//     credentials: true
-// }));
-
-// app.use((req, res, next) => {
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:8088');
-//     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-//     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-//     res.header('Access-Control-Allow-Credentials', 'true');
-//     next();
-//   });
-
-// Jūsų kitų serverio konfigūracijų
-app.get('/get-entries', (req, res) => {
-    console.log('test');
-  // Ši užklausa dabar turėtų veikti be CORS klaidų
-  res.json([{ date: '2025-03-01', type: 'profit', amount: 100 }]); // Pavyzdinis atsakymas
 });
 
 app.listen(5007, () => {
