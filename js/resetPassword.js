@@ -10,7 +10,7 @@ function resetPassword(token, newPassword) {
     .then((data) => {
         if (data.success) {
             alert("Password reset successful");
-            window.location.href = "login.html";  // Redirect to login page
+            window.location.href = "login.html"; 
         } else {
             alert("Error: " + data.message);
         }
@@ -23,7 +23,7 @@ function resetPassword(token, newPassword) {
 // Slaptažodžio atstatymo formos pateikimas
 document.getElementById("reset-password-form").addEventListener("submit", function(e) {
     e.preventDefault();
-    const token = window.location.pathname.split("/").pop(); // Get token from URL
+    const token = window.location.pathname.split("/").pop(); 
     const newPassword = document.getElementById("new-password").value;
     resetPassword(token, newPassword);
 });

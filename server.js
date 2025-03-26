@@ -132,11 +132,6 @@ app.delete("/delete-entry/:id", (req, res) => {
     });
 });
 
-// Serverio klausymas
-// const PORT = 5008;
-// app.listen(PORT, () => {
-//     console.log(`Server is running on http://localhost:${PORT}`);
-// });
 
 // Pavyzdinis el. pašto nustatymas naudojant nodemailer
 const transporter = nodemailer.createTransport({

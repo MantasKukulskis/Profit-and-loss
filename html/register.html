@@ -23,7 +23,7 @@
 
     <div class="login-container">
         <h1>Register</h1>
-        <form id="register-form" action="/register" method="POST">
+        <form id="register-form">
             <input type="text" id="username" name="username" placeholder="Username" required />
             <input type="email" id="email" name="email" placeholder="Email" required />
             <input type="password" id="password" name="password" placeholder="Password" required />
@@ -38,46 +38,67 @@
 
     <script>
         document.getElementById("register-form").addEventListener("submit", function(event) {
-            event.preventDefault();
-    
-            const username = document.getElementById("username").value;
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-            const confirmPassword = document.getElementById("confirm-password").value;
-    
-            // Patikriname, ar slaptažodžiai sutampa
-            if (password !== confirmPassword) {
-                alert("Passwords do not match!");
-                return;
-            }
-    
-            // Siųsti duomenis į serverį
-            const data = {
-                username: username,
-                email: email,
-                password: password
-            };
-    
-            fetch("/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.message) {
-                    alert(data.message); // Parodys registracijos sėkmės pranešimą
-                    window.location.href = "services.html"; // Nukreips į kitą puslapį
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('Registration failed!');
-            });
-        });
+    event.preventDefault();  // Neleidžia formos automatiškai siųsti
+
+    const username = document.getElementById("username").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+
+    // Patikriname, ar slaptažodžiai sutampa
+    if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+    }
+
+    // Patikriname, ar visi laukai užpildyti
+    if (!username || !email || !password || !confirmPassword) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    // Patikriname, ar el. paštas yra teisingo formato
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(email)) {
+        alert("Please enter a valid email address.");
+        return;
+    }
+
+   
+    const data = {
+        username: username,
+        email: email,
+        password: password
+    };
+
+    fetch("http://localhost:5007/register", {  
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        console.log("Server response status:", response.status);  
+        return response.json();
+    })
+    .then(data => {
+        console.log("Server response data:", data);  
+
+        if (data && data.success) {  
+            alert("Registration successful!");
+            window.location.href = "login.html";  
+        } else {
+            alert("Error: " + (data.message || "Unknown error"));  
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Registration failed! Please try again.');
+    });
+});
     </script>
+
     <script src="../js/register.js" defer></script>
 </body>
 </html>

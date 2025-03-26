@@ -19,7 +19,6 @@ function sendPasswordResetRequest(email) {
     });
 }
 
-// Slaptažodžio atstatymo formos pateikimas
 document.getElementById("forgot-password-form").addEventListener("submit", function(e) {
     e.preventDefault();
     const email = document.getElementById("forgot-email").value;
