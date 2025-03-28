@@ -8,7 +8,7 @@ const app = express();
 const db = new sqlite3.Database("./database.db");
 
 app.use(cors({
-    origin: 'http://localhost:8088',
+    origin: 'http://localhost:5007',
     methods: ['GET', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -30,6 +30,7 @@ app.post("/register", (req, res) => {
   if (!username || !email || !password) {
       return res.status(400).json({ message: "Please fill all fields" });
   }
+  
 
   db.get("SELECT * FROM users WHERE username = ?", [username], (err, row) => {
       if (err) return res.status(500).json({ error: err.message });

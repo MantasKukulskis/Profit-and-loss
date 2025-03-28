@@ -6,9 +6,18 @@
 
 header {
     width: 100%;
-    text-align: right;
-   
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
 }
+
+header nav {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+   
 
 body {
     background-image: url('../img/login.webp'); 
@@ -27,13 +36,7 @@ body {
 
 header a {
     text-transform: uppercase;
-    color: rgb(255, 255, 255);
     font-weight: bold;
-    padding-top: 20px;
-    text-align: right;
-    word-spacing: 50px;
-    padding-right: 30px;
-    display: inline-block;
     background-color: #007bff;
     color: white;
     padding: 10px 15px;
@@ -41,7 +44,7 @@ header a {
     text-decoration: none;
     border-radius: 10px;
     transition: transform 0.3s ease-in-out;
-    margin-right: 10px;
+    display: inline-block;
 
 }
 
