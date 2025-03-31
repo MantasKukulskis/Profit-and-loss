@@ -153,32 +153,3 @@ const transporter = nodemailer.createTransport({
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
 });
-
-// // Slaptažodžio atstatymo užklausa
-// app.post('/forgot-password', (req, res) => {
-//     const { email } = req.body;
-
-//     db.get('SELECT * FROM users WHERE email = ?', [email], (err, user) => {
-//         if (err) return handleError(res, err);
-
-//         if (!user) {
-//             return res.status(404).json({ success: false, message: 'No account with that email found' });
-//         }
-
-//         const resetToken = Math.random().toString(36).substring(2, 15);
-
-//         const mailOptions = {
-//             from: process.env.EMAIL,
-//             to: email,
-//             subject: 'Password Reset Request',
-//             text: `Click on the following link to reset your password: http://localhost:5006/reset-password?token=${resetToken}`
-//         };
-
-//         transporter.sendMail(mailOptions, (error, info) => {
-//             if (error) {
-//                 return res.status(500).json({ success: false, message: 'Failed to send email' });
-//             }
-//             res.json({ success: true, message: 'Password reset instructions have been sent to your email.' });
-//         });
-//     });
-// });
