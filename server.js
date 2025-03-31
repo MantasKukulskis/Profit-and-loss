@@ -4,18 +4,25 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const cors = require('cors');
 
+
 const app = express();
+
 const db = new sqlite3.Database("./database.db");
 
 app.use(cors({
-    origin: 'http://localhost:5007',
+    origin: 'http://localhost:3000',
     methods: ['GET', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
 app.use(express.json()); 
-app.use(express.static("public"));
+// app.use(express.static("public"));
+
+const path = require("path");
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 function handleError(res, error) {
     console.error(error.message);
@@ -143,8 +150,8 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-app.listen(5007, () => {
-  console.log('Server is running on http://localhost:5007');
+app.listen(3000, () => {
+  console.log('Server is running on http://localhost:3000');
 });
 
 // // Slaptažodžio atstatymo užklausa
@@ -175,4 +182,3 @@ app.listen(5007, () => {
 //         });
 //     });
 // });
-

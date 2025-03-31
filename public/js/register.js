@@ -1,5 +1,5 @@
 function registerUser(username, password, email) {
-    fetch("http://localhost:5007/register", { 
+    fetch("http://localhost:3000/register", { 
         method: "POST",
         headers: {
             "Content-Type": "application/json",
