@@ -145,8 +145,8 @@ app.delete("/delete-entry/:id", (req, res) => {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL, // Naudokite aplinkos kintamuosius
-        pass: process.env.EMAIL_PASSWORD // Naudokite aplinkos kintamuosius
+        user: process.env.EMAIL, 
+        pass: process.env.EMAIL_PASSWORD 
     }
 });
 
