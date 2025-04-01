@@ -6,11 +6,29 @@ const cors = require('cors');
 
 
 const app = express();
-
-const db = new sqlite3.Database("./database.db");
+const PORT = process.env.PORT || 4009;
+const db = new sqlite3.Database("./database.db", (err) => {
+    if (err) {
+        console.error("❌ Klaida atidarant DB:", err.message);
+    } else {
+        console.log("✅ Prisijungta prie SQLite duomenų bazės.");
+        db.run(`CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )`, (err) => {
+            if (err) {
+                console.error("❌ Klaida kuriant users lentelę:", err.message);
+            } else {
+                console.log("✅ Users lentelė paruošta.");
+            }
+        });
+    }
+});
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:5500',
     methods: ['GET', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
@@ -28,6 +46,15 @@ function handleError(res, error) {
     console.error(error.message);
     res.status(500).json({ error: error.message });
 }
+
+app.get("/", (req, res) => {
+    res.send("Backend veikia!");
+});
+
+// Paleidžiame serverį
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
 
 
 // Registracijos maršrutas
@@ -150,6 +177,3 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
-});
