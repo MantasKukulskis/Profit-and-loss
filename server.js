@@ -9,9 +9,9 @@ const app = express();
 const PORT = process.env.PORT || 4009;
 const db = new sqlite3.Database("./database.db", (err) => {
     if (err) {
-        console.error("❌ Klaida atidarant DB:", err.message);
+        console.error("❌ Error opening DB:", err.message);
     } else {
-        console.log("✅ Prisijungta prie SQLite duomenų bazės.");
+        console.log("✅ Connected to SQLite database.");
         db.run(`CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
@@ -19,9 +19,9 @@ const db = new sqlite3.Database("./database.db", (err) => {
             password TEXT NOT NULL
         )`, (err) => {
             if (err) {
-                console.error("❌ Klaida kuriant users lentelę:", err.message);
+                console.error("❌ Error creating users table:", err.message);
             } else {
-                console.log("✅ Users lentelė paruošta.");
+                console.log("✅ Users table ready.");
             }
         });
     }
@@ -35,7 +35,6 @@ app.use(cors({
 }));
 
 app.use(express.json()); 
-// app.use(express.static("public"));
 
 const path = require("path");
 
