@@ -50,13 +50,11 @@ app.get("/", (req, res) => {
     res.send("Backend veikia!");
 });
 
-// Paleidžiame serverį
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 
-// Registracijos maršrutas
 app.post("/register", (req, res) => {
   const { username, email, password } = req.body;
 
@@ -86,7 +84,7 @@ app.post("/register", (req, res) => {
   });
 });
 
-// Prisijungimo API maršrutas
+
 app.post("/login", (req, res) => {
     const { username, password } = req.body;
 
@@ -109,7 +107,6 @@ app.post("/login", (req, res) => {
     });
 });
 
-// Maršrutas įrašų gavimui pagal mėnesį ir metus
 app.get("/get-entries", (req, res) => {
     const { month, year } = req.query;
     let query = "SELECT * FROM entries";
@@ -137,7 +134,7 @@ app.get("/get-entries", (req, res) => {
     });
 });
 
-// Maršrutas naujo įrašo pridėjimui
+
 app.post("/add-entry", (req, res) => {
     console.log('Add entry route hit');
     const { type, date, amount } = req.body;
@@ -158,7 +155,6 @@ app.post("/add-entry", (req, res) => {
     );
 });
 
-// Maršrutas įrašui ištrinti
 app.delete("/delete-entry/:id", (req, res) => {
     db.run("DELETE FROM entries WHERE id = ?", req.params.id, function (err) {
         if (err) return handleError(res, err);
@@ -167,7 +163,6 @@ app.delete("/delete-entry/:id", (req, res) => {
 });
 
 
-// Pavyzdinis el. pašto nustatymas naudojant nodemailer
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {

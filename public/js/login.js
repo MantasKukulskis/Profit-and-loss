@@ -8,21 +8,21 @@ function loginUser(username, password) {
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error(`HTTP klaida! Statusas: ${response.status}`);
+            throw new Error(`HTTP error! Status: ${response.status}`);
         }
         return response.json(); 
     })
     .then(data => {
         if (data.success) {
-            alert("Prisijungimas sėkmingas!");
-            window.location.href = "dashboard.html"; 
+            alert("Login successful!");
+            window.location.href = "services.html"; 
         } else {
-            alert("Neteisingas vartotojo vardas arba slaptažodis");
+            alert("Incorrect username or password");
         }
     })
     .catch(error => {
-        console.error("Klaida prisijungiant:", error);
-        alert("Nepavyko prisijungti! Patikrinkite konsolę dėl detalių.");
+        console.error("Error logging in:", error);
+        alert("Failed to connect! Check your console for details.");
     });
 }
 
@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById("login-form");
     
     if (!form) {
-        console.error("Klaida: nerastas login-form elementas!");
+        console.error("Error: login-form element not found!");
         return;
     }
 
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const passwordInput = document.querySelector("input[name='password']");
         
         if (!usernameInput || !passwordInput) {
-            console.error("Klaida: trūksta įvesties laukelių!");
+            console.error("Error: Missing input fields!");
             return;
         }
 
@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const password = passwordInput.value.trim();
 
         if (!username || !password) {
-            alert("Prašome įvesti visus laukelius!");
+            alert("Please fill in all fields.!");
             return;
         }
 
