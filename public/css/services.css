@@ -22,7 +22,8 @@ header {
     
 }
   
-header nav a {
+header nav a,
+button {
     text-transform: uppercase;
     color: rgb(255, 255, 255);
     font-weight: bold;
@@ -41,7 +42,8 @@ header nav a {
     margin-right: 10px;
 }
 
-header > nav > a:hover {
+header > nav > a:hover,
+button:hover {
     transform: scale(1.2);
 }
 
