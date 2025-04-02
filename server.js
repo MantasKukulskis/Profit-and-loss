@@ -3,8 +3,12 @@ const sqlite3 = require("sqlite3").verbose();
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const cors = require('cors');
+const crypto = require("crypto");
+const util = require('util');
+require("dotenv").config();
 
 
+const bcryptAsync = util.promisify(bcrypt.hash);
 const app = express();
 const PORT = process.env.PORT || 4009;
 const db = new sqlite3.Database("./database.db", (err) => {
@@ -12,19 +16,45 @@ const db = new sqlite3.Database("./database.db", (err) => {
         console.error("❌ Error opening DB:", err.message);
     } else {
         console.log("✅ Connected to SQLite database.");
+
+        // Sukuriame "users" lentelę, jei jos dar nėra
         db.run(`CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
             email TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
+            password TEXT NOT NULL,
+            resetToken TEXT,
+            resetTokenExpiry INTEGER
         )`, (err) => {
             if (err) {
                 console.error("❌ Error creating users table:", err.message);
             } else {
-                console.log("✅ Users table ready.");
+                console.log("✅ Users table created successfully with required columns.");
+            }
+        });
+
+        // Sukuriame "entries" lentelę, jei jos dar nėra
+        db.run(`CREATE TABLE IF NOT EXISTS entries (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            type TEXT NOT NULL,
+            date TEXT NOT NULL,
+            amount REAL NOT NULL
+        )`, (err) => {
+            if (err) {
+                console.error("❌ Error creating entries table:", err.message);
+            } else {
+                console.log("✅ Entries table created successfully.");
             }
         });
     }
+});
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: '8mantas8@gmail.com',
+    pass: 'dttb pfem tzio scnw '
+  }
 });
 
 app.use(cors({
@@ -107,6 +137,106 @@ app.post("/login", (req, res) => {
     });
 });
 
+app.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Įveskite el. paštą" });
+  }
+
+  try {
+    // Patikriname, ar vartotojas egzistuoja
+    const user = await new Promise((resolve, reject) => {
+      db.get("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
+        if (err) reject(err);
+        resolve(user);
+      });
+    });
+
+    if (!user) {
+      console.error("❌ User not found with email:", email);
+      return res.status(404).json({ message: "El. paštas nerastas" });
+    }
+
+    // Sugeneruojame tokeną ir nustatome galiojimo laiką
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const tokenExpiry = Date.now() + 86400000;  // Token galioja 1 valandą
+
+    // Atlikite DB atnaujinimą su tokenu
+    await new Promise((resolve, reject) => {
+      db.run("UPDATE users SET resetToken = ?, resetTokenExpiry = ? WHERE email = ?", 
+        [resetToken, tokenExpiry, email], function(err) {
+          if (err) reject(err);
+          resolve();
+        });
+    });
+
+    console.log("✅ Token updated successfully for email:", email); 
+    const resetLink = `http://localhost:5500/public/html/reset-password.html?token=${resetToken}`;
+
+    // Siųsti el. laišką su nuoroda į slaptažodžio atstatymą
+    transporter.sendMail({
+      to: email,
+      subject: "Slaptažodžio atstatymas",
+      text: `Atstatyti slaptažodį: ${resetLink}`
+    }, (err, info) => {
+      if (err) {
+        console.error("❌ Klaida siunčiant el. laišką:", err);
+        return res.status(500).json({ message: "Failed to send reset link!" });
+      }
+
+      console.log('✅ El. laiškas išsiųstas:', info.response);
+      
+      // Grąžiname atsakymą tik po laiško išsiuntimo
+      return res.status(200).json({ message: "Nuoroda išsiųsta. Patikrinkite el. paštą." });
+    });
+
+  } catch (err) {
+    console.error("❌ Error in /forgot-password:", err);
+    return res.status(500).json({ error: "Nepavyko apdoroti užklausos" });
+  }
+});
+
+app.post("/reset-password", async (req, res) => {
+    const { token, newPassword } = req.body;
+  
+    if (!token || !newPassword) {
+        return res.status(400).json({ success: false, message: 'Token arba naujas slaptažodis trūksta.' });
+    }
+  
+    try {
+        // Patikriname, ar tokenas galioja
+        const user = await new Promise((resolve, reject) => {
+            db.get("SELECT * FROM users WHERE resetToken = ? AND resetTokenExpiry > ?", [token, Date.now()], (err, user) => {
+                if (err) reject(err);
+                resolve(user);
+            });
+        });
+
+        if (!user) {
+            return res.status(400).json({ success: false, message: 'Tokenas negalioja arba pasibaigęs.' });
+        }
+
+        // Slaptažodžio šifravimas
+        const hashedPassword = await bcryptAsync(newPassword, 10);
+
+        // Atnaujiname slaptažodį ir išvalome tokeną
+        db.run("UPDATE users SET password = ?, resetToken = NULL, resetTokenExpiry = NULL WHERE id = ?", 
+            [hashedPassword, user.id], function (err) {
+                if (err) {
+                    console.error("❌ Error updating password:", err);  // Papildoma klaidų žinutė serverio pusėje
+                    return res.status(500).json({ success: false, message: 'Klaida atnaujinant slaptažodį' });
+                }
+
+                console.log(`✅ Slaptažodis atnaujintas vartotojui su ID: ${user.id}`);
+                res.status(200).json({ success: true, message: 'Slaptažodis sėkmingai atnaujintas' });
+            });
+    } catch (err) {
+        console.error("❌ Error in /reset-password:", err);
+        return res.status(500).json({ success: false, message: 'Nepavyko apdoroti užklausos' });
+    }
+});
+
 app.get("/get-entries", (req, res) => {
     const { month, year } = req.query;
     let query = "SELECT * FROM entries";
@@ -163,11 +293,5 @@ app.delete("/delete-entry/:id", (req, res) => {
 });
 
 
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL, 
-        pass: process.env.EMAIL_PASSWORD 
-    }
-});
+
 
