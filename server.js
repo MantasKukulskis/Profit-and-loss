@@ -17,7 +17,6 @@ const db = new sqlite3.Database("./database.db", (err) => {
     } else {
         console.log("✅ Connected to SQLite database.");
 
-        // Sukuriame "users" lentelę, jei jos dar nėra
         db.run(`CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             username TEXT UNIQUE NOT NULL,
@@ -33,7 +32,6 @@ const db = new sqlite3.Database("./database.db", (err) => {
             }
         });
 
-        // Sukuriame "entries" lentelę, jei jos dar nėra
         db.run(`CREATE TABLE IF NOT EXISTS entries (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             type TEXT NOT NULL,
@@ -145,7 +143,6 @@ app.post("/forgot-password", async (req, res) => {
   }
 
   try {
-    // Patikriname, ar vartotojas egzistuoja
     const user = await new Promise((resolve, reject) => {
       db.get("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
         if (err) reject(err);
@@ -158,11 +155,9 @@ app.post("/forgot-password", async (req, res) => {
       return res.status(404).json({ message: "El. paštas nerastas" });
     }
 
-    // Sugeneruojame tokeną ir nustatome galiojimo laiką
     const resetToken = crypto.randomBytes(32).toString("hex");
-    const tokenExpiry = Date.now() + 86400000;  // Token galioja 1 valandą
+    const tokenExpiry = Date.now() + 86400000; 
 
-    // Atlikite DB atnaujinimą su tokenu
     await new Promise((resolve, reject) => {
       db.run("UPDATE users SET resetToken = ?, resetTokenExpiry = ? WHERE email = ?", 
         [resetToken, tokenExpiry, email], function(err) {
@@ -174,7 +169,6 @@ app.post("/forgot-password", async (req, res) => {
     console.log("✅ Token updated successfully for email:", email); 
     const resetLink = `http://localhost:5500/public/html/reset-password.html?token=${resetToken}`;
 
-    // Siųsti el. laišką su nuoroda į slaptažodžio atstatymą
     transporter.sendMail({
       to: email,
       subject: "Slaptažodžio atstatymas",
@@ -187,7 +181,6 @@ app.post("/forgot-password", async (req, res) => {
 
       console.log('✅ El. laiškas išsiųstas:', info.response);
       
-      // Grąžiname atsakymą tik po laiško išsiuntimo
       return res.status(200).json({ message: "Nuoroda išsiųsta. Patikrinkite el. paštą." });
     });
 
@@ -205,7 +198,6 @@ app.post("/reset-password", async (req, res) => {
     }
   
     try {
-        // Patikriname, ar tokenas galioja
         const user = await new Promise((resolve, reject) => {
             db.get("SELECT * FROM users WHERE resetToken = ? AND resetTokenExpiry > ?", [token, Date.now()], (err, user) => {
                 if (err) reject(err);
@@ -217,14 +209,13 @@ app.post("/reset-password", async (req, res) => {
             return res.status(400).json({ success: false, message: 'Tokenas negalioja arba pasibaigęs.' });
         }
 
-        // Slaptažodžio šifravimas
         const hashedPassword = await bcryptAsync(newPassword, 10);
 
-        // Atnaujiname slaptažodį ir išvalome tokeną
+    
         db.run("UPDATE users SET password = ?, resetToken = NULL, resetTokenExpiry = NULL WHERE id = ?", 
             [hashedPassword, user.id], function (err) {
                 if (err) {
-                    console.error("❌ Error updating password:", err);  // Papildoma klaidų žinutė serverio pusėje
+                    console.error("❌ Error updating password:", err);  
                     return res.status(500).json({ success: false, message: 'Klaida atnaujinant slaptažodį' });
                 }
 

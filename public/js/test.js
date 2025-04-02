@@ -1,10 +1,10 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // Arba jūsų naudojama paslauga (pvz., Outlook, Yahoo ir pan.)
+  service: 'gmail', 
   auth: {
-    user: '8mantas8@gmail.com', // Jūsų el. paštas
-    pass: 'dttb pfem tzio scnw ' // Jūsų App Password
+    user: '8mantas8@gmail.com', 
+    pass: 'dttb pfem tzio scnw ' 
   }
 });
 
