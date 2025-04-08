@@ -57,7 +57,7 @@ const transporter = nodemailer.createTransport({
 
 app.use(cors({
     origin: 'http://localhost:5500',
-    methods: ['GET', 'POST', 'DELETE'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
@@ -281,6 +281,32 @@ app.delete("/delete-entry/:id", (req, res) => {
         if (err) return handleError(res, err);
         res.json({ message: "Entry deleted" });
     });
+});
+
+app.put("/update-entry/:id", (req, res) => {
+    const { type, date, amount } = req.body;
+    const id = req.params.id;
+
+    if (!type || !date || !amount) {
+        return res.status(400).json({ error: "Trūksta duomenų redagavimui." });
+    }
+
+    db.run(
+        "UPDATE entries SET type = ?, date = ?, amount = ? WHERE id = ?",
+        [type, date, amount, id],
+        function (err) {
+            if (err) {
+                console.error("❌ Klaida atnaujinant įrašą:", err.message);
+                return res.status(500).json({ error: err.message });
+            }
+
+            if (this.changes === 0) {
+                return res.status(404).json({ message: "Įrašas nerastas" });
+            }
+
+            res.json({ message: "✅ Įrašas atnaujintas sėkmingai" });
+        }
+    );
 });
 
 
