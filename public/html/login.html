@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
+
     <link rel="icon" type="image/png" href="../favicon/favicon-96x96.png" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg" />
     <link rel="shortcut icon" href="../favicon.ico" />
@@ -13,11 +14,18 @@
     <link rel="stylesheet" href="../css/login.css">
 </head>
 <body>
-    
+
+    <header>
+        <nav>
+            <a href="../../index.html">Home</a>
+            <a href="forgot-password.html">Pamiršote slaptažodį?</a>
+            <button id="logout-btn" class="nav-btn" style="display: none;">Logout</button>
+        </nav>
+    </header>
 
     <div class="login-container">
         <h1>Login</h1>
-        <form id="login-form" action="http://localhost:4009/login" method="POST">
+        <form id="login-form">
             <input type="text" id="login-username" name="username" placeholder="Username" required />
             <input type="password" id="login-password" name="password" placeholder="Password" required />
             <button type="submit" class="btn">Login</button>
@@ -27,15 +35,8 @@
             <p>Don't have an account? <a href="../html/register.html">Register here</a></p>
         </div>
     </div>
-
-    <header>
-        <div>
-            <nav>
-                <a href="../../index.html">Home</a>
-                <a href="forgot-password.html">Pamiršote slaptažodį?</a>
-            </nav>
-        </div>
-    </header>
     <script src="../js/login.js" defer></script>
+    <script src="../js/logout.js" defer></script>
+
 </body>
 </html>
