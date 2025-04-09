@@ -24,7 +24,7 @@ function loginUser(username, password) {
     })
     .catch(error => {
         console.error("Error logging in:", error);
-        alert("Failed to connect! Check your console for details.");
+        alert("Failed to connect! Check your console for details");
     });
 }
 
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const password = passwordInput.value.trim();
 
         if (!username || !password) {
-            alert("Please fill in all fields.");
+            alert("Please fill in all fields");
             return;
         }
 

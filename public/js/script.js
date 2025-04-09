@@ -97,24 +97,24 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function editEntry(entryToEdit) {
-    const newType = prompt("Įveskite tipą (profit/loss):", entryToEdit.type);
-    const newDate = prompt("Įveskite datą (YYYY-MM-DD):", entryToEdit.date);
-    const newAmount = parseFloat(prompt("Įveskite sumą:", entryToEdit.amount));
+    const newType = prompt("Enter type (profit/loss):", entryToEdit.type);
+    const newDate = prompt("Enter date (YYYY-MM-DD):", entryToEdit.date);
+    const newAmount = parseFloat(prompt("Enter amount:", entryToEdit.amount));
   
     if (!['profit', 'loss'].includes(newType)) {
-      alert("Tipas turi būti 'profit' arba 'loss'");
+      alert("Type must be 'profit' or 'loss'");
       return;
     }
     if (!newDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
-      alert("Data turi būti formatu YYYY-MM-DD");
+      alert("The date must be in the format YYYY-MM-DD");
       return;
     }
     if (isNaN(newAmount) || newAmount <= 0 || newAmount > 1000) {
-      alert("Įveskite skaičių tarp 1 ir 1000");
+      alert("Enter a number between 1 and 1000");
       return;
     }
   
-    console.log("Redaguojamas įrašas su ID:", entryToEdit.id);
+    console.log("editable entry with ID:", entryToEdit.id);
   
     fetch(`http://localhost:4009/update-entry/${entryToEdit.id}`, {
       method: "PUT",
@@ -129,12 +129,12 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then(response => {
         if (!response.ok) {
-          throw new Error("Serveris grąžino klaidą");
+          throw new Error("The server returned an error");
         }
         return response.json();
       })
       .then(data => {
-        console.log("Atnaujinta:", data);
+        console.log("Updated:", data);
         
         entryToEdit.type = newType;
         entryToEdit.date = newDate;
@@ -143,8 +143,8 @@ document.addEventListener("DOMContentLoaded", function () {
         applyFilter();
       })
       .catch(error => {
-        console.error("Klaida redaguojant:", error);
-        alert("Nepavyko atnaujinti įrašo.");
+        console.error("Error while editing:", error);
+        alert("Failed to update while saving");
       });
   }
 
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
     if (isNaN(amount) || amount <= 0 || amount > 1000) {
-      alert("Please enter a valid amount between 1 and 1000€.");
+      alert("Please enter a valid amount between 1 and 1000€");
       return;
     }
 

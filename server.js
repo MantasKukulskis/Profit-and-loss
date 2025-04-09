@@ -28,7 +28,7 @@ const db = new sqlite3.Database("./database.db", (err) => {
             if (err) {
                 console.error("❌ Error creating users table:", err.message);
             } else {
-                console.log("✅ Users table created successfully with required columns.");
+                console.log("✅ Users table created successfully with required columns");
             }
         });
 
@@ -41,7 +41,7 @@ const db = new sqlite3.Database("./database.db", (err) => {
             if (err) {
                 console.error("❌ Error creating entries table:", err.message);
             } else {
-                console.log("✅ Entries table created successfully.");
+                console.log("✅ Entries table created successfully");
             }
         });
     }
@@ -75,7 +75,7 @@ function handleError(res, error) {
 }
 
 app.get("/", (req, res) => {
-    res.send("Backend veikia!");
+    res.send("Backend works!");
 });
 
 app.listen(PORT, () => {
@@ -139,7 +139,7 @@ app.post("/forgot-password", async (req, res) => {
   const { email } = req.body;
 
   if (!email) {
-    return res.status(400).json({ message: "Įveskite el. paštą" });
+    return res.status(400).json({ message: "Enter email" });
   }
 
   try {
@@ -152,7 +152,7 @@ app.post("/forgot-password", async (req, res) => {
 
     if (!user) {
       console.error("❌ User not found with email:", email);
-      return res.status(404).json({ message: "El. paštas nerastas" });
+      return res.status(404).json({ message: "Email not found" });
     }
 
     const resetToken = crypto.randomBytes(32).toString("hex");
@@ -171,22 +171,22 @@ app.post("/forgot-password", async (req, res) => {
 
     transporter.sendMail({
       to: email,
-      subject: "Slaptažodžio atstatymas",
-      text: `Atstatyti slaptažodį: ${resetLink}`
+      subject: "Password reset",
+      text: `Reset password: ${resetLink}`
     }, (err, info) => {
       if (err) {
-        console.error("❌ Klaida siunčiant el. laišką:", err);
+        console.error("❌ Error sending email:", err);
         return res.status(500).json({ message: "Failed to send reset link!" });
       }
 
-      console.log('✅ El. laiškas išsiųstas:', info.response);
+      console.log('✅ Email sent:', info.response);
       
-      return res.status(200).json({ message: "Nuoroda išsiųsta. Patikrinkite el. paštą." });
+      return res.status(200).json({ message: "Link sent. Check your email"});
     });
 
   } catch (err) {
     console.error("❌ Error in /forgot-password:", err);
-    return res.status(500).json({ error: "Nepavyko apdoroti užklausos" });
+    return res.status(500).json({ error: "Request could not be processed" });
   }
 });
 
@@ -194,7 +194,7 @@ app.post("/reset-password", async (req, res) => {
     const { token, newPassword } = req.body;
   
     if (!token || !newPassword) {
-        return res.status(400).json({ success: false, message: 'Token arba naujas slaptažodis trūksta.' });
+        return res.status(400).json({ success: false, message: 'Token or new password missing' });
     }
   
     try {
@@ -206,7 +206,7 @@ app.post("/reset-password", async (req, res) => {
         });
 
         if (!user) {
-            return res.status(400).json({ success: false, message: 'Tokenas negalioja arba pasibaigęs.' });
+            return res.status(400).json({ success: false, message: 'Token is invalid or expired' });
         }
 
         const hashedPassword = await bcryptAsync(newPassword, 10);
@@ -216,15 +216,15 @@ app.post("/reset-password", async (req, res) => {
             [hashedPassword, user.id], function (err) {
                 if (err) {
                     console.error("❌ Error updating password:", err);  
-                    return res.status(500).json({ success: false, message: 'Klaida atnaujinant slaptažodį' });
+                    return res.status(500).json({ success: false, message: 'Error updating password' });
                 }
 
                 console.log(`✅ Slaptažodis atnaujintas vartotojui su ID: ${user.id}`);
-                res.status(200).json({ success: true, message: 'Slaptažodis sėkmingai atnaujintas' });
+                res.status(200).json({ success: true, message: 'Password successfully updated' });
             });
     } catch (err) {
         console.error("❌ Error in /reset-password:", err);
-        return res.status(500).json({ success: false, message: 'Nepavyko apdoroti užklausos' });
+        return res.status(500).json({ success: false, message: 'Request could not be processed' });
     }
 });
 
@@ -288,7 +288,7 @@ app.put("/update-entry/:id", (req, res) => {
     const id = req.params.id;
 
     if (!type || !date || !amount) {
-        return res.status(400).json({ error: "Trūksta duomenų redagavimui." });
+        return res.status(400).json({ error: "Missing data for editing" });
     }
 
     db.run(
@@ -296,15 +296,15 @@ app.put("/update-entry/:id", (req, res) => {
         [type, date, amount, id],
         function (err) {
             if (err) {
-                console.error("❌ Klaida atnaujinant įrašą:", err.message);
+                console.error("❌ Error updating record:", err.message);
                 return res.status(500).json({ error: err.message });
             }
 
             if (this.changes === 0) {
-                return res.status(404).json({ message: "Įrašas nerastas" });
+                return res.status(404).json({ message: "Record not found" });
             }
 
-            res.json({ message: "✅ Įrašas atnaujintas sėkmingai" });
+            res.json({ message: "✅ Record updated successfully" });
         }
     );
 });

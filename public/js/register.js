@@ -19,7 +19,7 @@ function registerUser(username, password, email) {
     })
     .catch((error) => {
         console.error("Error:", error); 
-        alert("Registration failed! Please try again.");
+        alert("Registration failed! Please try again");
     });
 }
 
@@ -32,17 +32,17 @@ document.getElementById("register-form").addEventListener("submit", function(e) 
     const email = document.getElementById("email").value;
 
     if (!username || !password || !email) {
-        alert("Please fill in all fields.");
+        alert("Please fill in all fields");
         return;
     }
 
     if (!isValidEmail(email)) {
-        alert("Please enter a valid email address.");
+        alert("Please enter a valid email address");
         return;
     }
 
     if (!isStrongPassword(password)) {
-        alert("Password must be at least 6 characters long.");
+        alert("Password must be at least 6 characters long");
         return;
     }
 
